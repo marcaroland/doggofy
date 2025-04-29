@@ -1,0 +1,15 @@
+
+# Paths
+IMAGE_TRAIN_DIR:  '/home/marcaroland/workspace/doggofy_app/data/train'
+labels: "/home/marcaroland/workspace/doggofy_app/data/labels.csv"
+
+# Image settings
+IMG_SIZE: [224,224]
+
+# Model settings
+EPOCHS: 10
+VERBOSE: 1
+BATCH_SIZE: 16
+TRAIN_SIZE: 0.9
+BUFFER_SIZE: 1000
+TRAINABLE: False

@@ -1,0 +1,9 @@
+tensorflow
+keras
+random
+os
+pandas
+numpy
+warnings
+matplotlib.pyplot
+sklearn
