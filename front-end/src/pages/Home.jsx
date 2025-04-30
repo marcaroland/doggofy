@@ -111,7 +111,7 @@ const Home = () => {
 
       {/* Footer Section */}
       <footer className="mt-16 text-gray-400 text-sm text-center">
-        © 2025 DoggoApp • Built with React, Tailwind, and 🐶
+        © 2025 Doggofy App • Built with React, Tailwind, Python, and 🐶
       </footer>
     </div>
   );
