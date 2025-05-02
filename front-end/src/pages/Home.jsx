@@ -1,121 +1,108 @@
-// Import React hooks and the Navbar component
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import axios from "axios"; // Import axios for making API requests
+import axios from "axios";
+import background from "../assets/background.jpg";
 
-// Define the main Home component
 const Home = () => {
-  // ----------------------
-  // STATE DEFINITIONS
-  // ----------------------
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [prediction, setPrediction] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [image, setImage] = useState(null); // Stores the uploaded image file
-  const [preview, setPreview] = useState(null); // Stores the image preview URL for displaying the photo
-  const [prediction, setPrediction] = useState(""); // Stores the prediction result string
-  const [loading, setLoading] = useState(false); // Indicates whether the prediction is in progress
-
-  // ----------------------
-  // HANDLERS
-  // ----------------------
-
-  // Handles the image file upload and generates a preview
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file from input
-    setImage(file); // Save the file to state
-    setPreview(URL.createObjectURL(file)); // Create and store a preview URL
-    setPrediction(""); // Clear any previous prediction
+    const file = e.target.files[0];
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+    setPrediction("");
   };
 
-  // Handles the prediction request to FastAPI
   const handlePredict = async () => {
-    setLoading(true); // Set loading to true to disable the button and show spinner
-
+    setLoading(true);
     const formData = new FormData();
-    formData.append("file", image); // Append the image file to FormData
+    formData.append("file", image);
 
     try {
-      // Make a POST request to the FastAPI endpoint with the image
       const response = await axios.post(
         "http://localhost:8000/predict",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Important for file uploads
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      setPrediction(response.data.predicted_breed); // Set the predicted breed
+      setPrediction(response.data.predicted_breed);
     } catch (error) {
       console.error("Error during prediction:", error);
       setPrediction("Failed to predict breed.");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
-  // ----------------------
-  // UI RENDER
-  // ----------------------
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex flex-col items-center px-4 py-10">
-      {/* Navbar at the top */}
-      <Navbar />
-
-      {/* Hero Section: title and subtitle */}
-      <div className="text-center mb-10">
-        <h2 className="text-4xl font-extrabold text-gray-800 drop-shadow-md">
-          Dog Breed Identifier
-        </h2>
-        <p className="text-gray-600 text-lg mt-2">
-          Upload a dog photo — our AI will guess the breed!
-        </p>
-      </div>
-
-      {/* Upload Card: file input, image preview, predict button, and result */}
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-md shadow-xl rounded-2xl p-6 flex flex-col items-center space-y-5 border border-gray-200">
-        {/* File Upload */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="text-sm text-gray-600"
-        />
-
-        {/* Image Preview */}
-        {preview && (
-          <img
-            src={preview}
-            alt="Uploaded dog"
-            className="w-64 h-64 object-cover rounded-xl shadow-lg border"
-          />
-        )}
-
-        {/* Predict Button */}
-        <button
-          onClick={handlePredict}
-          disabled={!image || loading} // Disable when no image or during prediction
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-md font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? "Predicting..." : "Predict Breed"}
-        </button>
-
-        {/* Prediction Result */}
-        {prediction && (
-          <div className="mt-3 text-xl font-semibold text-indigo-800 animate-fade-in">
-            🎉 Prediction: {prediction}
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Content wrapper */}
+      <div className="flex-grow flex flex-col items-center px-4 py-10">
+        <div className="w-full max-w-5xl flex flex-col items-center space-y-10 text-center text-gray-900">
+          {/* Hero Section */}
+          <div className="px-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-white">
+              Discover Your Dog’s Breed with Doggofy!
+            </h1>
+            <p className="text-base sm:text-lg text-center text-white mt-2">
+              Upload a photo and let our AI do the guessing!
+            </p>
           </div>
-        )}
+
+          {/* Upload Section */}
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl text-center w-[90%] max-w-md mx-auto">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="text-sm text-gray-700"
+            />
+
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="mt-4 rounded-xl w-full max-w-xs mx-auto"
+              />
+            )}
+
+            <button
+              onClick={handlePredict}
+              disabled={!image || loading}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50 mt-4"
+            >
+              {loading ? "Predicting..." : "Predict Breed"}
+            </button>
+
+            {prediction && (
+              <div className="mt-2 text-lg font-semibold text-indigo-700">
+                🎉 Prediction: {prediction}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Footer Section */}
-      <footer className="mt-16 text-gray-400 text-sm text-center">
+      {/* Footer stays at the bottom */}
+      <footer className="text-center py-4 text-white drop-shadow-md">
         © 2025 Doggofy App • Built with React, Tailwind, Python, and 🐶
       </footer>
     </div>
   );
 };
 
-// Export the component for use in routing
 export default Home;
