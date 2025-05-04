@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import background from "../assets/background.jpg";
+import Card from "../Card";
+import health_vet from "../assets/health_vet.jpeg";
 
 const Home = () => {
   const [image, setImage] = useState(null);
@@ -39,6 +41,15 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  // Example cards data
+  const cardData = [
+    {
+      title: "Health Card",
+      image: health_vet,
+      backContent: "Friendly, intelligent, and devoted. Perfect for families.",
+    },
+  ];
 
   return (
     <div
@@ -95,6 +106,26 @@ const Home = () => {
             )}
           </div>
         </div>
+
+        {/* Suggested Breeds Section */}
+
+        {prediction && (
+          <div className="mt-12 px-4 w-full max-w-6xl mx-auto">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
+              Information Cards
+            </h2>
+            <div className="flex justify-center">
+              {cardData.map((card, index) => (
+                <Card
+                  key={index}
+                  title={card.title}
+                  image={card.image}
+                  backContent={card.backContent}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Footer stays at the bottom */}
