@@ -108,24 +108,6 @@ const Home = () => {
         </div>
 
         {/* Suggested Breeds Section */}
-
-        {prediction && (
-          <div className="mt-12 px-4 w-full max-w-6xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
-              Information Cards
-            </h2>
-            <div className="flex justify-center">
-              {cardData.map((card, index) => (
-                <Card
-                  key={index}
-                  title={card.title}
-                  image={card.image}
-                  backContent={card.backContent}
-                />
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Footer stays at the bottom */}
