@@ -14,7 +14,7 @@ class DataLoader:
 
     def read_train_image_and_label(self, image_id: tf.Tensor, label: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
         """
-        Load and preprocess an image from the training directory.
+        Load and preprocess an image only from the training directory.
 
         Args:
             image_id (tf.Tensor): Image ID without the file extension.
