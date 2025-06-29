@@ -5,7 +5,7 @@ class ConfigLoader:
     @staticmethod
     def read_config(path: str) -> Dict:
         """
-        Load the configuration from a YAML file.
+        Load the configuration from a YAML file as a staticmethod.
 
         Args:
             path (str): Path to the YAML configuration file.
