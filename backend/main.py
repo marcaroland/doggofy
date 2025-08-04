@@ -1,15 +1,16 @@
-import sys
 import os
+import sys
+
 import joblib
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from tensorflow.keras.models import load_model
 
 # Add the project root (doggofy_app) to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from config_loader import ConfigLoader
-from modelling import Modelling
+from backend.config.config_loader import ConfigLoader
+from backend.models.modelling import Modelling
 
 label_encoder = joblib.load(
     "/Users/marcaroland/Projects/doggofy/doggofy/backend/saved_models/label_encoder.pkl"
@@ -47,4 +48,5 @@ async def predict(file: UploadFile = File(...)):
     """
     contents = await file.read()
     predicted_breed = modeller.predict_from_bytes(contents)
+    return {"predicted_breed": predicted_breed}
     return {"predicted_breed": predicted_breed}

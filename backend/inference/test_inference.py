@@ -1,9 +1,11 @@
 import os
-import tensorflow as tf
+
 import joblib
+import tensorflow as tf
 from tensorflow.keras.models import load_model
-from modelling import Modelling
-from config_loader import ConfigLoader
+
+from backend.config.config_loader import ConfigLoader
+from backend.models.modelling import Modelling
 
 # Paths to the model, label encoder, and test image
 model_path = "./saved_models/doggofy_model.keras"
@@ -27,5 +29,7 @@ try:
     image_bytes = tf.io.read_file(test_image_path).numpy()  # Read the image as bytes
     predicted_breed = modeller.predict_from_bytes(image_bytes)  # Make prediction
     print(f"Predicted breed: {predicted_breed}")
+except Exception as e:
+    print(f"Error during inference: {e}")
 except Exception as e:
     print(f"Error during inference: {e}")

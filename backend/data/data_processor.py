@@ -1,9 +1,11 @@
-import tensorflow as tf
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
 from typing import Tuple
 
-from data_loader import DataLoader
+import pandas as pd
+import tensorflow as tf
+from sklearn.preprocessing import LabelEncoder
+
+from backend.data.data_loader import DataLoader
+
 
 class DataProcessor:
     def __init__(self, config: dict):
@@ -56,5 +58,7 @@ class DataProcessor:
 
         train_ds = train_ds.shuffle(self.config['BUFFER_SIZE']).batch(self.config['BATCH_SIZE']).prefetch(1)
         val_ds = val_ds.batch(self.config['BATCH_SIZE']).prefetch(1)
+
+        return train_ds, val_ds
 
         return train_ds, val_ds
