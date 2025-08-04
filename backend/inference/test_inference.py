@@ -31,5 +31,3 @@ try:
     print(f"Predicted breed: {predicted_breed}")
 except Exception as e:
     print(f"Error during inference: {e}")
-except Exception as e:
-    print(f"Error during inference: {e}")
