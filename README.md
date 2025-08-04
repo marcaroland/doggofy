@@ -1,50 +1,106 @@
 # Doggofy App
 
-Doggofy is a web application that uses AI to predict the breed of a dog from an uploaded image. The project consists of a **React front-end** and a **FastAPI back-end**, with a TensorFlow model for inference.
+**Doggofy** is a full-stack AI-powered web application that predicts the breed of a dog from an uploaded image. It features a **React + Tailwind CSS** front-end and a **FastAPI + TensorFlow** back-end.
 
 ---
 
 ## Features
 
-- **Upload Dog Images**: Users can upload images of dogs to identify their breed.
-- **AI-Powered Predictions**: The back-end uses a pre-trained TensorFlow model to predict the breed.
-- **Responsive Design**: The front-end is built with Tailwind CSS for a modern and responsive UI.
-- **Interactive Cards**: Displays additional information about dog breeds in a visually appealing card format.
+- **Upload Dog Images**: Users can upload photos to identify dog breeds.
+- **AI-Powered Predictions**: Uses a pre-trained TensorFlow model to predict breeds.
+- **Responsive UI**: Designed with Tailwind CSS for a seamless experience across devices.
+- **Breed Info Cards**: Interactive cards show detailed information about predicted breeds.
 
 ---
 
 ## Project Structure
 
 ### Back-End (`/backend`)
-The back-end is built with **FastAPI** and serves the AI model for predictions.
 
-- **Key Files**:
-  - `main.py`: The entry point for the FastAPI server.
-  - `modelling.py`: Contains the `Modelling` class for handling the TensorFlow model.
-  - `test_inference.py`: A script to test the model's inference capabilities.
-  - `config.yaml`: Configuration file for model settings and paths.
-  - `saved_models/`: Directory containing the pre-trained TensorFlow model and label encoder.
+Built with **FastAPI** and **TensorFlow**, the backend handles image processing, AI predictions, and model training.
 
-- **Endpoints**:
-  - `POST /predict`: Accepts an image file and returns the predicted breed.
+#### Key Files
 
-### Front-End (`/front-end`)
-The front-end is built with **React** and styled using **Tailwind CSS**.
+- `main.py`: FastAPI server with prediction endpoint.
+- `modelling.py`: Contains the `Modelling` class for model handling.
+- `test_inference.py`: Script to test inference from images.
+- `config.yaml`: Central configuration for paths and model settings.
+- `data_loader.py`: Loads training and validation data.
+- `data_processor.py`: Prepares and encodes datasets.
+- `config_loader.py`: Loads settings from `config.yaml`.
+- `model_training.ipynb`: Jupyter Notebook for model training.
+- `utils.py`: General utility functions.
+- `requirements.txt`: Python dependencies.
+- `saved_models/`:
+  - `doggofy_model.keras`: Pre-trained TensorFlow model.
+  - `label_encoder.pkl`: Scikit-learn label encoder.
 
-- **Key Files**:
-  - `src/pages/Home.jsx`: The main page where users can upload images and view predictions.
-  - `src/Card.jsx`: A reusable card component for displaying breed information.
-  - `src/index.css`: Custom styles for the application.
-  - `src/assets/`: Contains static assets like images.
+#### Key Components
 
-- **Routing**:
-  - `/`: Home page.
+- **FastAPI App (`main.py`)**
+  - Initializes server and CORS middleware.
+  - `POST /predict`: Receives image file, returns predicted breed.
+
+- **Modelling Class (`modelling.py`)**
+  - Loads and manages MobileNetV2-based model.
+  - Methods: `__init__`, `build`, `fit`, `predict`, `predict_from_bytes`.
+
+- **Data Loader & Processor**
+  - `DataLoader`: Loads and structures image data.
+  - `DataProcessor`: Encodes labels, creates TensorFlow datasets.
+
+- **Model Training**
+  - Conducted via `model_training.ipynb` using transfer learning.
+
+#### Model Details
+
+- **Base Model**: MobileNetV2 (ImageNet pre-trained)
+- **Architecture**:
+  - Global Average Pooling
+  - Dense (512 units, ReLU)
+  - Output: 120 classes (Softmax)
+- **Training Settings**:
+  - Image size: `[224, 224]`
+  - Batch size: `16`
+  - Epochs: `10`
+  - Optimizer: `Adam`
+  - Loss: `SparseCategoricalCrossentropy`
+- **Config** (`config.yaml`):
+  - Paths: Training images, label CSV
+  - Model Settings: `EPOCHS`, `BATCH_SIZE`, `TRAINABLE`, `IMG_SIZE`
+
+---
+
+### 🔜 Front-End (`/front-end`)
+
+Developed using **React** and styled with **Tailwind CSS**, the front-end provides a smooth UI for image upload and result display.
+
+#### Key Files
+
+- `src/pages/Home.jsx`: Main page with image upload and results.
+- `src/Card.jsx`: Card component displaying breed info.
+- `src/index.css`: Global styles.
+- `src/assets/`: Contains images and static content.
+
+#### Routing
+
+- `/`: Home page.
 
 ---
 
 ## Installation
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **Python** (v3.10 or higher)
-- **pip** and **virtualenv**
+
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [Python](https://www.python.org/) (v3.10 or higher)
+- `pip` and `virtualenv`
+
+### Backend Setup
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn main:app --reload
